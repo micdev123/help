@@ -1,0 +1,230 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+body {
+  background: #F8FBFB;
+  background: linear-gradient(90deg, #f3f3f3, #f6fffe);
+  scrollbar-width: none;
+  @apply overflow-x-hidden scrollbar scrollbar-w-[3px] scrollbar-thumb-[#31759a] scrollbar-track-zinc-300 scroll-smooth md:scrollbar-w-[5px];
+  scroll-behavior: smooth;
+}
+
+.header {
+  background: #F8FBFB;
+  background: linear-gradient(90deg, #f3f3f3, #f3fffe);
+}
+
+.logo, .name, .campaign-btn {
+  font-family: 'Montserrat Alternates', sans-serif;
+  @apply font-semibold;
+}
+
+.desktop-nav li{
+  @apply text-[12px] font-medium
+}
+
+
+
+.campaign-btn {
+  background-image: linear-gradient(
+    90deg,
+    hsl(184deg 72% 64%) 0%,
+    hsl(187deg 65% 58%) 1%,
+    hsl(190deg 59% 52%) 5%,
+    hsl(192deg 60% 47%) 11%,
+    hsl(194deg 67% 42%) 18%,
+    hsl(197deg 72% 37%) 27%,
+    hsl(199deg 75% 33%) 39%,
+    hsl(202deg 75% 29%) 56%,
+    hsl(206deg 74% 25%) 100%
+  );
+}
+
+.featured-campaign {
+  background-image: linear-gradient(
+    135deg,
+    hsl(130deg 100% 99%) 0%,
+    hsl(154deg 69% 97%) 22%,
+    hsl(169deg 60% 96%) 33%,
+    hsl(182deg 55% 94%) 42%,
+    hsl(192deg 65% 94%) 50%,
+    hsl(200deg 71% 93%) 58%,
+    hsl(208deg 72% 93%) 67%,
+    hsl(219deg 67% 93%) 78%,
+    hsl(237deg 53% 93%) 100%
+  );
+}
+
+.news-letter-sign-up {
+  background-image: linear-gradient(
+    55deg,
+    hsl(159deg 100% 96%) -1%,
+    hsl(168deg 87% 95%) 0%,
+    hsl(175deg 77% 94%) 2%,
+    hsl(183deg 73% 94%) 5%,
+    hsl(189deg 76% 94%) 10%,
+    hsl(194deg 77% 94%) 16%,
+    hsl(199deg 76% 94%) 24%,
+    hsl(204deg 72% 94%) 34%,
+    hsl(209deg 66% 94%) 50%,
+    hsl(215deg 58% 94%) 94%
+  );
+}
+
+.campaign-description, .donation-form, .tabs-content, .tabs {
+  scrollbar-width: none;
+}
+
+/* input {
+  outline: none;
+  @apply outline-0
+} */
+
+.creator-header {
+  /*
+  * Created with https://www.css-gradient.com
+  * Gradient link: https://www.css-gradient.com/?c1=f8fbfb&c2=dff3f2&gt=l&gd=dtl
+  */
+  background: #F8FBFB;
+  background: linear-gradient(135deg, #F8FBFB, #DFF3F2);
+  @apply rounded-md
+}
+
+.cover-image {
+  background: #B2E7F2;
+  background: radial-gradient(at center, #B2E7F2, #0F0F0F);
+  @apply rounded-md
+}
+
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #adb5bd;
+  pointer-events: none;
+  height: 0;
+  font-size: 12px;
+}
+
+.ProseMirror {
+    h1,
+    h2,
+    h3 {
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    h1:first-child,
+    h2:first-child,
+    h3:first-child {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-top: 20px;
+      margin-bottom: 16px;
+      font-size: 1.3rem;
+    }
+
+    h2 {
+        margin-top: 15px;
+        margin-bottom: 12px;
+        font-size: 1.1rem;
+    }
+
+    h3 {
+        margin-top: 15px;
+        margin-bottom: 12px;
+        font-size: 0.9rem;
+    }
+}
+
+
+.ProseMirror {
+    ul,
+    ol {
+        margin-top: 16px;
+        margin-bottom: 16px;
+        margin-left: 48px;
+    }
+
+    ul {
+        list-style: disc;
+    }
+
+    ol {
+        list-style: decimal;
+    }
+
+    li {
+        margin-bottom: 4px;
+        font-size: 12px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.editor-header {
+  h1 {
+    font-size: 1.2rem;
+    @apply font-bold my-1;
+  }
+  h2 {
+    font-size: 1rem;
+    @apply font-semibold my-1;
+  }
+  h3 {
+    font-size: 0.8rem;
+    @apply font-medium my-1;
+  }
+
+}
+
+.story {
+  h1 {
+    font-size: 1.2rem;
+    @apply font-bold my-1;
+  }
+  h2 {
+    font-size: 1rem;
+    @apply font-semibold my-1;
+  }
+  h3 {
+    font-size: 0.8rem;
+    @apply font-medium my-1;
+  }
+
+  p {
+    @apply my-3 leading-[1.2rem] text-[13px];
+  }
+
+  li{
+    @apply text-[14px] ml-5 font-medium;
+  }
+  img {
+    @apply w-[100%] rounded-md
+  }
+}
+
+
+.tooltip {
+  position: relative;
+  display: flex;
+}
+
+.tooltip-content {
+  visibility: hidden;
+  white-space: nowrap;
+}
+
+.tooltip:hover .tooltip-content {
+  visibility: visible;
+}
+

@@ -1,0 +1,672 @@
+return isRedirecting ? (
+        <div className='w-[100%] h-screen flex flex-col justify-center items-center'>
+            <HashLoader color="#36d7b7" size={30} className='mb-4'/>
+            <span className="mb-8 text-sm text-slate-500">Redirecting to dashboard</span>
+        </div>
+    ) : (
+        <div>
+            <div className="max-w-[85%] mx-auto sm:max-w-[90%] xl:max-w-[80%]">
+                <TopNav />
+
+                <div className={`overlay w-[100vw] h-[100%] bg-zinc-600 fixed top-0 left-0 z-20 opacity-[0.5]`}></div>
+                <div className="w-[90%] add-project fixed top-[4rem] xl:left-[30%]  z-30">
+                        <ManageCampaign
+                            onClose={handleCloseModal}
+                            onSubmit={HandleCreate}
+                            campaignType={isSelected}
+                            user={authUser}
+                        />
+                </div>
+                <main className='mt-8'>
+                    {/* Head */}
+                    <section className="head flex flex-col items-start gap-[1rem] mb-[2rem] sm:flex-row sm:items-center">
+                        <div className="image w-[12rem] rounded-md">
+                            <img src="/assets/campaign.jpg" alt="" className='w-[100%] object-cover rounded-md' />
+                        </div>
+                        <div className="content">
+                            <h2 className='text-[1.1rem] font-medium sm:text-[1.3rem]'>
+                                Let’s start your campaign!
+                            </h2>
+                            <p className='text-[11.5px] mt-1 sm:w-[25rem] sm:text-[13px]'>
+                                Our aim is to develop an exceptional onboarding experience tailored specifically for your needs.
+                            </p>
+                        </div>
+                        
+                    </section>
+                    {/* Campaign For */}
+                    <section className="campaign-for">
+                        <div className="content">
+                            <h2 className='text-[0.85rem] font-medium mb-3 sm:text-[1rem]'>
+                                What are you raising funds for?
+                            </h2>
+                            <div className="flex flex-col items-center gap-x-[1rem] md:flex-row">
+                                {campaignFor?.map((type) => {
+                                    const { id, text, description, image, slug } = type;
+                                    return (
+                                        <div
+                                            onClick={() => setIsSelected(slug)}
+                                            key={id} className={`method w-[100%] flex gap-4 items-center justify-between bg-zinc-50 py-[10px] px-2 border-[1px] rounded-md mb-2 cursor-pointer md:px-5 ${isSelected === slug && ('border-2 border-sky-500')}`}
+                                        >
+                                            <div className="left flex items-center gap-x-3">
+                                                <div className="w-[20px] h-[12px] rounded-full border border-slate-500 flex justify-center items-center sm:h-[20px] md:h-[13px]">
+                                                    <div className={`w-[7px] h-[7px] scale-0 bg-sky-700 rounded-full ${isSelected === slug && ('scale-100')} sm:w-[12px] sm:h-[12px] md:w-[7px] md:h-[7px]`}></div>
+                                                </div>
+                                                <div className="">
+                                                    <h2 className='text-[0.8rem] font-medium sm:text-[0.9rem]'>
+                                                        {text}
+                                                    </h2>
+                                                    <p className='text-[9px] mt-1 sm:text-[11.5px]'>
+                                                        {description}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className="image hidden w-[5rem] sm:block">
+                                                <img src={image} alt={image} className='w-[100%] h-[100%] object-cover rounded-md' />
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </div>
+                        {isSelected === 'nonprofit' && (
+                            <form action="" className='w-[100%] mt-[1.5rem] sm:w-[70%] md:w-[49%]' onSubmit={HandleCampaignCreator}>
+                                <div className="form-container mb-5">
+                                    {/* Organizer | organization name */}
+                                    <div className="form-group flex flex-col mb-5">
+                                        <label htmlFor="" className='text-[12px] font-medium mb-2'>
+                                            Organizer | Organization Name
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="name"
+                                            id="name"
+                                            autoComplete='name'
+                                            // required
+                                            placeholder='Enter organizer | organisation name'
+                                            className='text-[11px] bg-zinc-50 py-[5px] px-[10px] rounded-md outline-0 border-[0.5px] border-slate-200'
+                                            value={formData?.name}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    {/* Mission statement */}
+                                    <div className="form-group mb-5">
+                                        <label htmlFor="" className='flex flex-col text-[12px] font-medium'>
+                                            Your Mission Statement
+                                            <textarea
+                                                name="mission"
+                                                id="mission" cols="30" rows="6"
+                                                placeholder='Short precise mission statement'
+                                                className='text-[11px] py-[8px] px-[10px] bg-zinc-50 border-[0.5px] border-slate-200 rounded-md font-normal mt-2'
+                                                value={formData?.mission}
+                                                onChange={handleChange}
+                                            ></textarea>
+                                        </label>
+                                    </div>
+                                    {/* Contact | socials */}
+                                    <div className="form-group mb-5">
+                                        <label htmlFor="" className='text-[12px] font-medium flex items-center gap-x-3'>
+                                            Socials | Contact <span className='text-[10px]'>(eg. email, facebook, etc)</span>
+                                            <button
+                                                type='button'
+                                                onClick={() => HandleContact()}
+                                                className='text-[10px] bg-gray-200  py-[3px] px-[10px] rounded-sm outline-0'>
+                                                Add more
+                                            </button>
+                                        </label>
+                                        <div className="inputs my-3">
+                                            {contacts?.map((contact, index) => (
+                                                <div className="input flex items-center gap-x-2 my-1" key={index}>
+                                                    <input
+                                                        type="text"
+                                                        name={`contact${index}`}
+                                                        id={`contact${index}`}
+                                                        value={contact}
+                                                        placeholder='Copy social | contact link and paste' className='w-[100%] text-[11px] py-[5px] px-[10px] bg-zinc-50 border-[0.5px] border-slate-200 outline-0 rounded-md' />
+                                                    <MdDelete
+                                                        onClick={() => RemoveContact(index)}
+                                                        className='text-[14px] text-red-900 cursor-pointer' />
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <div className="input flex items-center gap-x-2 mt-3">
+                                            <input
+                                                type="text"
+                                                placeholder='Copy social | contact link and paste' className='w-[96%] text-[11px] py-[5px] px-[10px] bg-zinc-50 border-[0.5px] border-slate-200 outline-0 rounded-md'
+                                                value={contact}
+                                                onChange={(e) => setContact(e.target.value)} />
+                                        </div>
+                                    </div>
+                                    {/* Cover Image & Logo Image */}
+                                    <div className="flex justify-between">
+                                        {/* Cover photo */}
+                                        <div className="form-group">
+                                            <div className="">
+                                                <div className="flex items-center gap-x-2 mb-3">
+                                                    <label htmlFor="" className='text-[12px] font-medium'>
+                                                        Your Brand Cover-photo
+                                                    </label>
+                                                    <label htmlFor="coverImg" className='text-[10px] bg-gray-200  py-[3px] px-[10px] rounded-sm outline-0 font-medium cursor-pointer'>
+                                                        Add cover-photo
+                                                    </label>
+                                                </div>
+                                                <input
+                                                    type="file"
+                                                    name='coverImg'
+                                                    id='coverImg'
+                                                    className='hidden'
+                                                    onChange={handleCoverImgChange}
+                                                />
+                                            </div>
+                                            {coverImg && (
+                                                <div className="output bg-zinc-50 p-2 rounded-md w-[14rem] h-[11rem] flex items-center justify-center mb-5">
+                                                    <img src={coverImg} className='w-[100%] h-[100%] object-cover' alt="coverImg" />
+                                                </div>
+                                            )}
+                                        </div>
+                                        {/* Logo */}
+                                        <div className="form-group">
+                                            <div className="">
+                                                <div className="flex items-center gap-x-2 mb-3">
+                                                    <label htmlFor="" className='text-[12px] font-medium'>
+                                                        Your Brand Logo
+                                                    </label>
+                                                    <label htmlFor="logoImg" className='text-[10px] bg-gray-200  py-[3px] px-[10px] rounded-sm outline-0 font-medium cursor-pointer'>
+                                                        Add Logo
+                                                    </label>
+                                                </div>
+                                                <input
+                                                    type="file"
+                                                    name='logoImg'
+                                                    id='logoImg'
+                                                    className='hidden'
+                                                    onChange={handleLogoImgChange}
+                                                />
+                                            </div>
+                                            {logoImg && (
+                                                <div className="output bg-zinc-50 p-2 rounded-md w-[14rem] h-[11rem] flex items-center justify-center mb-5">
+                                                    <img src={logoImg} className='w-[100%] h-[100%] object-cover' alt="logo" />
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                                <button className='text-[11px] bg-zinc-700 text-white py-[5.5px] px-[1.2rem] rounded-sm outline-0 mt-2'>
+                                    { loading ? (<BeatLoader color="#36d7b7" size={7} />) : 'Continue' }
+                                </button>
+                            </form>
+                        )}
+                        <button className='text-[11px] bg-zinc-700 text-white py-[5.5px] px-[1.2rem] rounded-sm outline-0 mt-2'>
+                            Continue
+                        </button>
+                    </section>
+                    {/* Steps in creating a compelling campaigns */}
+                    <section className="steps mt-[3rem]">
+                        <div className="head flex items-center justify-between mb-4">
+                            <h2 className='text-[0.9rem] font-medium'>
+                                Here are the steps to help you create a compelling campaign.
+                            </h2>
+                            {/* Navigation */}
+                            <div className="view-more flex items-center">
+                                <button className='left-nav bg-white py-[2px] px-[5px]'>
+                                    <MdOutlineNavigateBefore />
+                                </button>
+                                <div className="w-[2px] h-[1rem] bg-zinc-300"></div>
+                                <button className='right-nav bg-white py-[2px] px-[5px]'>
+                                    <MdOutlineNavigateNext />
+                                </button>
+                            </div>
+                        </div>
+                        <div className="steps-container flex gap-x-[0.7rem] pb-1 overflow-x-scroll scrollbar scrollbar-thumb-slate-500 scrollbar-track-slate-200 scrollbar-w-[2px] scrollbar-h-[3px] scrollbar-track-rounded-md scrollbar-thumb-rounded-md scroll-mt-4">
+                            {steps?.map((step) => {
+                                const { id, icon, title, description, bgColor } = step;
+                                return (
+                                    <div className={`step min-w-[20rem] p-4 rounded-md ${id && bgColor}`} key={id}>
+                                        <p className='text-[1.6rem] mb-4'>
+                                            {icon}
+                                        </p>
+                                        <p className='text-[14px] font-medium mb-2'>
+                                            {title}
+                                        </p>
+                                        <p className='text-[12px] leading-[1.2rem]'>
+                                            {description}
+                                        </p>
+                                    </div>
+                                )
+                            })} 
+                        </div>
+                    </section>
+                </main>
+            </div>
+            <Footer />
+        </div>
+    )
+
+
+<form action="" className='py-3 px-5' onSubmit={HandleSubmit}>
+    {/* Cover Image */}
+    <div className="form-group mb-5">
+        <div className="upload mb-4">
+            <div className="flex items-center gap-x-3">
+                <label htmlFor="" className='flex items-center justify-center gap-1 text-[12px] font-medium'>
+                    Campaign cover image :
+                </label>
+
+                <label htmlFor="coverImg"
+                    className='flex items-center justify-center gap-1 text-[9px] font-medium bg-zinc-50 py-[4px] px-[10px] rounded-md cursor-pointer hover:bg-zinc-100'>
+                    <AiOutlineCloudUpload className='text-[14px]' />
+                    Add image
+                </label>
+            </div>
+            <input type='file' id='coverImg' className='hidden' onChange={handleCoverImgUpload} />
+        </div>
+        {selectedCampaign?.coverImg ? (
+        <div className="image bg-zinc-50 w-[100%] h-[15rem] p-2 rounded-md">
+            <img src={selectedCampaign?.coverImg} alt="" className='w-[100%] h-[100%] object-cover rounded-md' />
+        </div>
+        ) : coverImg && (
+        <div className="image bg-zinc-50 w-[100%] h-[15rem] p-2 rounded-md">
+            <img src={coverImg} alt="" className='w-[100%] h-[100%] object-cover rounded-md' />
+        </div>
+        )}
+
+    </div>
+
+    {/* Campaign name */}
+    <div className="form-group flex flex-col mb-6">
+        <label htmlFor="" className='text-[12px] font-medium mb-2'>
+            Campaign name :
+        </label>
+        <input type="text" name="name" id="name" autoComplete='name' placeholder='Campaign name' required
+            className='text-[10px] bg-zinc-50 outline-0 border-0 py-[5px] px-[10px] rounded-sm'
+            value={selectedCampaign?.name} onChange={handleChange} />
+    </div>
+
+    {/* Campaign Tagline */}
+    <div className="form-group flex flex-col mb-6">
+        <label htmlFor="" className='text-[12px] font-medium mb-1'>
+            Campaign Tagline :
+        </label>
+        <p className='text-[11px] mb-3 text-zinc-600'>
+            Provide a short description that best describes your campaign to your audience.
+        </p>
+        <textarea name="tagline" id="tagline" autoComplete='tagline' placeholder='Campaign tagline' cols="30" rows="5"
+            required className='text-[11px] bg-zinc-50 outline-0 border-0 py-[5px] px-[10px] rounded-sm'
+            value={selectedCampaign?.tagline} onChange={handleChange}></textarea>
+    </div>
+
+    {/* Target Community | Beneficiaries name */}
+    <div className="form-group flex flex-col mb-6">
+        <label htmlFor="" className='text-[12px] font-medium mb-2'>
+            Target Community | Beneficiaries :
+        </label>
+        <input type="text" name="beneficiaries" id="beneficiaries" autoComplete='beneficiaries'
+            placeholder='Target Community name | Beneficiaries name' required
+            className='text-[10px] bg-zinc-50 outline-0 border-0 py-[5px] px-[10px] rounded-sm'
+            value={selectedCampaign?.beneficiaries} onChange={handleChange} />
+    </div>
+
+    {/* Status Duration date */}
+    <div className="form-group flex items-center gap-x-5 mb-6">
+        {/* End date */}
+        <div className="flex flex-col">
+            <label htmlFor="" className='text-[12px] font-medium mb-2'>
+                End date :
+            </label>
+            <input type="date" name="endDate" id="endDate" autoComplete='endDate' required
+                value={selectedCampaign?.endDate} onChange={handleChange}
+                className='text-[10px] bg-zinc-50 outline-0 border-0 py-[3.7px] px-[10px] rounded-sm' />
+        </div>
+
+        {/* Donation Target */}
+        <div className="form-group-target">
+            <label htmlFor="" className='text-[12px] font-medium'>
+                Donation Target :
+            </label>
+            <div className="flex items-center gap-x-2 bg-zinc-50 py-[3.2px] px-[10px] rounded-sm mt-1">
+                <p className='text-[13px]'>
+                    {currency === 'USD' ? '$' : 'LE'}
+                </p>
+                <input type="text" name="target" id="target" autoComplete='target' placeholder='Donation target'
+                    required className='w-[13rem] text-[10px] bg-transparent outline-0 border-0 '
+                    value={selectedCampaign?.target} onChange={handleChange} />
+            </div>
+        </div>
+    </div>
+
+    {/* Campaign Description */}
+    <div className="form-group flex flex-col mb-6">
+        <label htmlFor="" className='text-[12px] font-medium mb-2'>
+            Campaign Story :
+        </label>
+        <p className='text-[11px] mb-4 text-zinc-600'>
+            Inform potential contributors more about your campaign. Provide details and enticing information that
+            encourages them to contribute. Craft a pitch that captivates, educates, and is easily understandable.
+        </p>
+
+        <div
+            className="md:max-h-[74.5vh] md:overflow-x-hidden md:overflow-auto md:scrollbar md:scrollbar-w-[1px] md:scrollbar-thumb-[#31759a] md:scrollbar-track-zinc-300 scroll-smooth">
+            <TextEditor campaign={selectedCampaign?.body} editorContent={(newBody)=> {
+                setBody(newBody)
+                }}
+                // body={campaignData?.body}
+                />
+        </div>
+    </div>
+    {/* Primary Contact */}
+    <div className="primary-contact mt-6">
+        <div className="head mb-6">
+            <h2 className='text-[14px] font-medium'>
+                Primary Contact
+            </h2>
+            <p className='text-[11px] mb-4 text-zinc-600'>
+                Kindly provide the legal address and contact details, either personal or for your company. It is
+                important to note that your contact information may be shared as necessary to fulfill reporting or
+                disclosure obligations.
+            </p>
+        </div>
+        {/* Inputs */}
+        <div className="mt-6">
+            {/* Creator Full name & Email */}
+            <div className="w-[100%] flex items-center gap-x-3">
+                {/* Full name */}
+                <div className="w-[100%] form-group flex flex-col mb-6">
+                    <label htmlFor="" className='text-[12px] font-medium mb-2'>
+                        Legal Fullname :
+                    </label>
+                    <input type="text" name="creatorName" id="creatorName" autoComplete='creatorName'
+                        placeholder='Legal fullname' required
+                        className='w-[100%] text-[10px] bg-zinc-50 outline-0 border-0 py-[5px] px-[10px] rounded-sm'
+                        value={selectedCampaign?.creatorName} onChange={handleChange} />
+                </div>
+
+                {/* Email */}
+                <div className="w-[100%] form-group flex flex-col mb-6">
+                    <label htmlFor="" className='text-[12px] font-medium mb-2'>
+                        Email :
+                    </label>
+                    <input type="email" name="creatorEmail" id="creatorEmail" autoComplete='creatorEmail'
+                        placeholder='Email' required
+                        className='w-[100%] text-[10px] bg-zinc-50 outline-0 border-0 py-[5px] px-[10px] rounded-sm'
+                        value={selectedCampaign?.creatorEmail} onChange={handleChange} />
+                </div>
+            </div>
+
+            {/* Creator Address & Phone number */}
+            <div className="w-[100%] flex items-center gap-x-3">
+                {/* Address */}
+                <div className="w-[100%] form-group flex flex-col mb-6">
+                    <label htmlFor="" className='text-[12px] font-medium mb-2'>
+                        Legal Address :
+                    </label>
+                    <input type="text" name="creatorAddress" id="creatorAddress" autoComplete='creatorAddress'
+                        placeholder='Legal address' required
+                        className='w-full text-[10px] bg-zinc-50 outline-0 border-0 py-[5px] px-[10px] rounded-sm'
+                        value={selectedCampaign?.creatorAddress} onChange={handleChange} />
+                </div>
+
+                {/* Phone number */}
+                <div className="w-[100%] form-group flex flex-col mb-6">
+                    <label htmlFor="" className='text-[12px] font-medium mb-2'>
+                        Phone Number :
+                    </label>
+                    <input type="text" name="creatorMobile" id="creatorMobile" autoComplete='creatorMobile'
+                        placeholder='Phone number' required
+                        className='w-[100%] text-[10px] bg-zinc-50 outline-0 border-0 py-[5px] px-[10px] rounded-sm'
+                        value={selectedCampaign?.creatorMobile} onChange={handleChange} />
+                </div>
+            </div>
+        </div>
+
+        {/* Contact | socials */}
+        <div className="form-group mt-6">
+            <label htmlFor="" className='text-[12px] font-medium flex items-center gap-x-3'>
+                Socials | Contact <span className='text-[10px]'>(eg. website, facebook, etc)</span>
+                <button type='button' // onClick={()=> HandleSave('contacts')}
+                    className='text-[10px] bg-gray-200 py-[3px] px-[10px] rounded-sm outline-0'>
+                    Add more
+                </button>
+            </label>
+            <div className="inputs my-3">
+                {selectedCampaign?.contacts?.map((contact, index) => (
+                <div className="input flex items-center gap-x-2 my-1" key={index}>
+                    <input type="text" name={`contact${index}`} id={`contact${index}`} value={contact}
+                        placeholder='Copy social | contact link and paste'
+                        className='w-[100%] text-[11px] py-[5px] px-[10px] bg-zinc-50 border-[0.5px] border-slate-200 outline-0 rounded-md' />
+                    <MdDelete // onClick={()=> HandleDelete('contacts', index)}
+                        className='text-[14px] text-red-900 cursor-pointer' />
+                </div>
+                ))}
+            </div>
+            <div className="input flex items-center gap-x-2 mt-3">
+                <input type="text" placeholder='Copy social | contact link and paste'
+                    className='w-[96%] text-[11px] py-[5px] px-[10px] bg-zinc-50 border-[0.5px] border-slate-200 outline-0 rounded-md'
+                    value={selectedCampaign?.contact} onChange={(e)=> setContact(e.target.value)}
+                />
+            </div>
+        </div>
+    </div>
+
+    <div className="buttons flex gap-2 mt-8">
+        <button type='submit'
+            className='bg-cyan-600 py-[4px] px-[15px] text-[10px] font-medium text-white rounded-sm outline-0 border-0 hover:bg-cyan-700'>
+            Update
+        </button>
+
+    </div>
+</form>
+
+
+const [isPrevHovered, setIsPrevHovered] = useState(false);
+const [isNextHovered, setIsNextHovered] = useState(false);
+
+const campaignIndex = campaigns.findIndex((campaign) => campaign.id === parseInt(id));
+const prevCampaignIndex = (campaignIndex - 1 + campaigns.length) % campaigns.length;
+const nextCampaignIndex = (campaignIndex + 1) % campaigns.length;
+
+
+const handlePrevCampaign = () => {
+navigate(`/campaign/${campaigns[prevCampaignIndex].id}`);
+};
+
+const handleNextCampaign = () => {
+navigate(`/campaign/${campaigns[nextCampaignIndex].id}`);
+};
+
+// Calculating days left
+// const campaign = campaigns[campaignIndex];
+// console.log(campaigns[prevCampaignIndex]);
+// console.log(campaigns[nextCampaignIndex]);
+
+const handleMouseLeave = () => {
+setIsPrevHovered(false);
+setIsNextHovered(false);
+};
+
+
+<div className="next-previous flex items-center gap-x-3">
+    {/* Previous Preview */}
+    <div className="relative previous">
+        <p onClick={handlePrevCampaign}
+            className='previous flex items-center gap-x-1 text-[11px] uppercase font-medium cursor-pointer'
+            onMouseEnter={()=> setIsPrevHovered(!isPrevHovered)} onMouseLeave={handleMouseLeave}
+            >
+            <BiLeftArrowCircle className='text-[13px]' />
+            Pervious
+        </p>
+        {isPrevHovered && (
+        <div className="w-[27rem] bg-white absolute top-[1.2rem] right-0 shadow-sm transition duration-500 ease-in">
+            <div className="w-[100%] flex items-center gap-x-2 py-[4px] px-[5px]">
+                <div className="img w-fit h-[5rem] bg-zinc-100 rounded-sm flex items-center justify-center p-[6px]">
+                    <img src={campaigns[prevCampaignIndex].coverImg} alt=""
+                        className='w-[100%] h-[100%] object-cover rounded-sm' />
+                </div>
+
+                <div className="content">
+                    <p
+                        className='w-fit bg-zinc-100 font-medium py-[2px] px-[8px] text-[8px] rounded-sm mb-1 md:text-[8px]'>
+                        { campaigns[prevCampaignIndex].endDate}
+                    </p>
+                    <h3 className='text-[11px] font-medium line-clamp-1'>
+                        {campaigns[prevCampaignIndex].campaignTitle}
+                    </h3>
+                    {/* Target && Raised */}
+                    <div className="flex items-center gap-x-2">
+                        <div className="target flex items-center gap-2 my-1">
+                            <p className='flex items-center gap-x-1 text-[0.7rem] sm:text-[0.6rem]'>
+                                Target :
+                            </p>
+                            <p className='amount text-[0.75rem] font-medium md:text-[0.7rem]'>
+                                {currency === 'USD' ? '$' : 'LE'}
+                                <span>
+                                    {campaigns[prevCampaignIndex]?.target &&
+                                    (ConvertCurrency(campaigns[prevCampaignIndex]?.target,
+                                    currency).toLocaleString("en-US"))}
+                                </span>
+                            </p>
+                        </div>
+
+                        <div className="w-[1.5px] h-[13px] bg-slate-400 hidden sm:block"></div>
+                        {/* Raised */}
+                        <div className="raised flex items-center gap-2 my-1">
+                            <p className='flex items-center gap-x-1 text-[0.7rem] sm:text-[0.6rem]'>
+                                Raised :
+                            </p>
+                            <p className='amount text-[0.75rem] font-medium md:text-[0.7rem]'>
+                                {currency === 'USD' ? '$' : 'LE'}
+                                <span>
+                                    {campaigns[prevCampaignIndex]?.raised &&
+                                    (ConvertCurrency(campaigns[prevCampaignIndex]?.raised,
+                                    currency).toLocaleString("en-US"))}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        )}
+    </div>
+    {/* Separator */}
+    <div className="w-[2px] h-[10px] bg-zinc-300"></div>
+    {/* Next Preview */}
+    <div className="relative next">
+        <p onClick={handleNextCampaign}
+            className='next flex items-center gap-x-1 text-[11px] uppercase font-medium cursor-pointer'
+            onMouseEnter={()=> setIsNextHovered(!isNextHovered)} onMouseLeave={handleMouseLeave}
+            >
+            <BiRightArrowCircle className='text-[13px]' />
+            Next
+        </p>
+        {isNextHovered && (
+        <div className="w-[27rem] bg-white absolute top-[1.2rem] right-0 shadow-sm transition duration-500 ease-in">
+            <div className="w-[100%] flex items-center gap-x-2 py-[4px] px-[5px]">
+                <div className="img w-fit h-[5rem] bg-zinc-100 rounded-sm flex items-center justify-center p-[6px]">
+                    <img src={campaigns[nextCampaignIndex].coverImg} alt=""
+                        className='w-[100%] h-[100%] object-cover rounded-sm' />
+                </div>
+
+                <div className="content p-1">
+                    <p
+                        className='w-fit bg-zinc-100 font-medium py-[2px] px-[8px] text-[8px] rounded-sm mb-1 md:text-[8px]'>
+                        { campaigns[nextCampaignIndex].endDate}
+                    </p>
+                    <h3 className='text-[11px] font-medium line-clamp-1'>
+                        {campaigns[nextCampaignIndex].campaignTitle}
+                    </h3>
+                    <div className="flex items-center gap-x-2">
+                        <div className="target flex items-center gap-2 my-1">
+                            <p className='flex items-center gap-x-1 text-[0.7rem] sm:text-[0.6rem]'>
+                                Target :
+                            </p>
+                            <p className='amount text-[0.75rem] font-medium md:text-[0.7rem]'>
+                                {currency === 'USD' ? '$' : 'LE'}
+                                <span>
+                                    {campaigns[nextCampaignIndex]?.target &&
+                                    (ConvertCurrency(campaigns[nextCampaignIndex]?.target,
+                                    currency).toLocaleString("en-US"))}
+                                </span>
+                            </p>
+                        </div>
+
+                        <div className="w-[1.5px] h-[13px] bg-slate-400 hidden sm:block"></div>
+                        {/* Raised */}
+                        <div className="raised flex items-center gap-2 my-1">
+                            <p className='flex items-center gap-x-1 text-[0.7rem] sm:text-[0.6rem]'>
+                                Raised :
+                            </p>
+                            <p className='amount text-[0.75rem] font-medium md:text-[0.7rem]'>
+                                {currency === 'USD' ? '$' : 'LE'}
+                                <span>
+                                    {campaigns[nextCampaignIndex]?.raised &&
+                                    (ConvertCurrency(campaigns[nextCampaignIndex]?.raised,
+                                    currency).toLocaleString("en-US"))}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        )}
+    </div>
+
+</div>
+
+
+const storedTags = JSON.parse(localStorage.getItem(key)) || [];
+else if (key === 'tags' && storedTags.length < 3) { storedTags.push(tag); localStorage.setItem(key,
+    JSON.stringify(storedTags)); setTags(storedTags) }
+
+    
+        const storedTags = JSON.parse(localStorage.getItem(key)) || [];
+
+        else if (key === 'tags') {
+            if (index >= 0 && index < storedTags.length) {
+                storedTags.splice(index, 1);
+                setTags(storedTags)
+                localStorage.setItem(key, JSON.stringify(storedTags));
+            }
+        }
+
+        if (initialData && [...storedTags].every(item => initialData?.tags.includes(item))) {
+            localStorage.setItem('tags', JSON.stringify(initialData?.tags));
+        }
+
+        if (storedTags) setTags(storedTags);
+{/* Campaign tags */}
+<div className="form-group mb-6">
+    <div className="flex flex-col">
+        <label htmlFor="" className='text-[12px] font-medium mb-1'>
+            Tags :
+        </label>
+        <p className='text-[11px] mb-4 text-zinc-600'>
+            Enter 3 keywords that best describe your campaign. These tags will aid in organizing and improving the
+            visibility of your campaign.
+        </p>
+        <div className="flex items-center gap-x-2">
+            {/* Tags Output */}
+            <div className="tags flex items-center gap-x-2">
+                {tags?.map((tag, index) => (
+                <p className='flex items-center gap-x-2 text-[9px] bg-zinc-100 py-[3px] px-[10px] border-[1px] border-dashed border-slate-200 font-medium rounded-md'
+                    key={index}>
+                    {tag}
+                    <span>
+                        <AiFillDelete onClick={()=> HandleDelete('tags', index)}
+                            className='text-[13px] text-red-900 cursor-pointer'
+                            />
+                    </span>
+                </p>
+                ))}
+            </div>
+            {/* Tag Input */}
+            <input type="text" name="tags" id="tags" autoComplete='tags' placeholder='eg education, medical'
+                className='text-[10px] bg-zinc-50 outline-0 border-0 py-[5px] px-[10px] rounded-sm' value={tag}
+                onChange={(e)=> setTag(e.target.value)}
+            />
+            <button type='button' onClick={()=> HandleSave('tags')}
+                className='text-[10px] bg-slate-300 font-medium py-[3px] px-[10px] rounded-md'>
+                Add tags
+            </button>
+        </div>
+    </div>
+</div>
